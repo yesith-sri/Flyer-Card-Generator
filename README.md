@@ -101,9 +101,7 @@ npm run lint     # Run Next.js linting
 
 Default port guidance from the project docs:
 
-- Application server: `3000`
-- API server: `5000`
-- Database: `5432`, if applicable
+- Next.js application: `3000`
 
 For more details, see [Port Access Configuration](docs/config/PORT_ACCESS.md).
 

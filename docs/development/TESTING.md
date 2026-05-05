@@ -1,40 +1,67 @@
 # Testing Guide
 
-Comprehensive testing documentation for the project.
+Verification guidance for Flyer Generator.
 
 ## Overview
-This guide covers testing procedures, frameworks, and best practices for the project.
 
-## Running Tests
+The project currently includes linting and production build checks, but it does not define an automated unit test script in `package.json`.
 
-### Unit Tests
+## Current Checks
+
+### Lint
+
 ```bash
-npm test
+npm run lint
 ```
 
-### Run specific test file
+### Production Build
+
 ```bash
-npm test -- <test-file-name>
+npm run build
 ```
 
-### Watch mode
+### Run the App Locally
+
 ```bash
-npm test -- --watch
+npm run dev
 ```
 
-## Testing Framework
-The project uses standard testing tools. Refer to the specific framework documentation for advanced usage.
+Open `http://localhost:3000` and verify:
+
+1. Teams load from Firestore.
+2. Members update after selecting a team.
+3. Image upload and crop controls work.
+4. The flyer preview updates with the selected team, member, and cropped photo.
+5. The flyer downloads as a PNG.
+
+## Future Automated Testing
+
+Recommended additions:
+
+- Unit tests for Firestore query helpers
+- Component tests for team and member selectors
+- Component tests for the image crop flow
+- End-to-end test for selecting a member, cropping an image, and downloading a flyer
 
 ## Best Practices
+
 1. Write tests for new features
-2. Ensure all tests pass before committing
-3. Maintain test coverage
+2. Run lint and build before committing
+3. Keep Firebase-dependent tests isolated with mocks or test data
 4. Use descriptive test names
 
 ## Troubleshooting
-- Clear node_modules and reinstall if tests fail
+
+- Clear `node_modules` and reinstall if dependency-related checks fail
 - Check [Setup Guide](../guides/SETUP.md) for environment setup
-- Review [Port Access](../config/PORT_ACCESS.md) for port-related test issues
+- Review [Port Access](../config/PORT_ACCESS.md) for port-related local issues
 
 ## CI/CD Integration
-Tests should run automatically in your CI/CD pipeline. See project configuration for details.
+
+At minimum, CI should run:
+
+```bash
+npm install
+npm run lint
+npm run build
+```
