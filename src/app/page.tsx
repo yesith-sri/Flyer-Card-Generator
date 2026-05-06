@@ -8,14 +8,104 @@ import { ImageCropper } from "@/components/ImageCropper";
 import { FlyerTemplate } from "@/components/FlyerTemplate";
 import { getAllTeams, getTeamMembers, TeamMember, Team } from "@/lib/firebaseQueries";
 
+// ── Caption generator ─────────────────────────────────────────────────────────
+function generateCaption(memberName: string, teamName: string): string {
+  return `🎉 Thrilled to share that I, ${memberName}, have successfully registered for the Inter University Cloud Ideathon — Beauty of Cloud 2.0! ☁️
+
+Representing Team ${teamName}, we're geared up to innovate, collaborate, and push the boundaries of cloud technology.
+
+This is going to be an incredible journey and I can't wait to see what we build together! 🚀
+
+#BeautyOfCloud2 #CloudIdeathon #IEEE #USJIEEE #CloudComputing #Team${teamName.replace(/\s+/g, "")}`;
+}
+
+// ── CaptionBox component ──────────────────────────────────────────────────────
+function CaptionBox({
+  memberName,
+  teamName,
+}: {
+  memberName: string;
+  teamName: string;
+}) {
+  const [copied, setCopied] = useState(false);
+  const caption = generateCaption(memberName, teamName);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(caption);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      // Fallback for older browsers
+      const textarea = document.createElement("textarea");
+      textarea.value = caption;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    }
+  };
+
+  return (
+    <div className="bg-dark-blue-700 bg-opacity-50 backdrop-blur rounded-2xl p-8 border border-dark-blue-600">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-2xl font-bold text-blue-300">
+          Step 3: Copy Caption
+        </h2>
+      </div>
+
+      {/* Caption text area */}
+      <div className="relative">
+        <pre className="whitespace-pre-wrap text-sm text-gray-300 leading-relaxed bg-dark-blue-900 bg-opacity-70 rounded-xl p-5 border border-dark-blue-600 font-sans min-h-[160px]">
+          {caption}
+        </pre>
+      </div>
+
+      {/* Copy button */}
+      <button
+        onClick={handleCopy}
+        className={`mt-4 w-full flex items-center justify-center gap-2 font-bold py-3 px-4 rounded-lg transition-all duration-200 text-sm
+          ${copied
+            ? "bg-green-600 hover:bg-green-600 text-white"
+            : "bg-blue-600 hover:bg-blue-500 text-white"
+          }`}
+      >
+        {copied ? (
+          <>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+            </svg>
+            Copied to Clipboard!
+          </>
+        ) : (
+          <>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+              />
+            </svg>
+            Copy Caption
+          </>
+        )}
+      </button>
+    </div>
+  );
+}
+
+// ── Page ──────────────────────────────────────────────────────────────────────
 export default function Home() {
   const [teams, setTeams] = useState<Team[]>([]);
   const [selectedTeam, setSelectedTeam] = useState<string>("");
   const [members, setMembers] = useState<TeamMember[]>([]);
   const [selectedMember, setSelectedMember] = useState<string>("");
-  const [selectedMemberData, setSelectedMemberData] = useState<TeamMember | null>(
-    null
-  );
+  const [selectedMemberData, setSelectedMemberData] = useState<TeamMember | null>(null);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [croppedImage, setCroppedImage] = useState<string | null>(null);
   const [showCropper, setShowCropper] = useState(false);
@@ -36,7 +126,6 @@ export default function Home() {
         setIsLoading(false);
       }
     };
-
     loadTeams();
   }, []);
 
@@ -49,7 +138,6 @@ export default function Home() {
         setSelectedMemberData(null);
         return;
       }
-
       setIsLoading(true);
       try {
         const loadedMembers = await getTeamMembers(selectedTeam);
@@ -60,7 +148,6 @@ export default function Home() {
         setIsLoading(false);
       }
     };
-
     loadMembers();
   }, [selectedTeam]);
 
@@ -94,14 +181,12 @@ export default function Home() {
 
   const downloadFlyer = async () => {
     if (!flyerRef.current || !selectedTeam || !selectedMemberData) return;
-
     setIsDownloading(true);
     try {
       const canvas = await html2canvas(flyerRef.current, {
         backgroundColor: null,
         scale: 2,
       });
-
       const link = document.createElement("a");
       link.href = canvas.toDataURL("image/png");
       link.download = `${selectedTeam}_${selectedMemberData.name}_flyer.png`;
@@ -135,7 +220,6 @@ export default function Home() {
                 Step 1: Select Team & Member
               </h2>
 
-              {/* Team Selector */}
               <div className="mb-6">
                 <TeamSelector
                   teams={teams}
@@ -145,7 +229,6 @@ export default function Home() {
                 />
               </div>
 
-              {/* Member Selector */}
               {selectedTeam && (
                 <div className="mb-8">
                   <MemberSelector
@@ -260,6 +343,14 @@ export default function Home() {
                   </>
                 )}
               </button>
+            )}
+
+            {/* LinkedIn Caption — shown as soon as member is selected */}
+            {selectedMember && selectedMemberData && (
+              <CaptionBox
+                memberName={selectedMemberData.name}
+                teamName={selectedTeam}
+              />
             )}
           </div>
 
