@@ -51,7 +51,7 @@ function CaptionBox({
   };
 
   return (
-    <div className="bg-dark-blue-700 bg-opacity-50 backdrop-blur rounded-2xl p-8 border border-dark-blue-600">
+    <div className="bg-dark-blue-700 bg-opacity-50 backdrop-blur rounded-2xl p-4 sm:p-8 border border-dark-blue-600">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-blue-300">
           Step 3: Copy Caption
@@ -183,9 +183,22 @@ export default function Home() {
     if (!flyerRef.current || !selectedTeam || !selectedMemberData) return;
     setIsDownloading(true);
     try {
+      await document.fonts.ready;
+
       const canvas = await html2canvas(flyerRef.current, {
         backgroundColor: null,
         scale: 2,
+        onclone: (clonedDocument) => {
+          const registeredText = clonedDocument.querySelector(
+            "[data-flyer-registered]"
+          ) as HTMLElement | null;
+
+          if (registeredText) {
+            registeredText.style.top = "162px";
+            registeredText.style.height = "115px";
+            registeredText.style.lineHeight = "115px";
+          }
+        },
       });
       const link = document.createElement("a");
       link.href = canvas.toDataURL("image/png");
@@ -200,7 +213,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-dark-blue-900 via-dark-blue-800 to-dark-blue-900 text-white p-6">
+    <main className="min-h-screen bg-gradient-to-br from-dark-blue-900 via-dark-blue-800 to-dark-blue-900 text-white p-4 sm:p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
@@ -215,7 +228,7 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Panel - Controls */}
           <div className="space-y-6">
-            <div className="bg-dark-blue-700 bg-opacity-50 backdrop-blur rounded-2xl p-8 border border-dark-blue-600">
+            <div className="bg-dark-blue-700 bg-opacity-50 backdrop-blur rounded-2xl p-4 sm:p-8 border border-dark-blue-600">
               <h2 className="text-2xl font-bold mb-6 text-blue-300">
                 Step 1: Select Team & Member
               </h2>
@@ -243,14 +256,14 @@ export default function Home() {
 
             {/* Image Upload & Crop */}
             {selectedMember && (
-              <div className="bg-dark-blue-700 bg-opacity-50 backdrop-blur rounded-2xl p-8 border border-dark-blue-600">
+              <div className="bg-dark-blue-700 bg-opacity-50 backdrop-blur rounded-2xl p-4 sm:p-8 border border-dark-blue-600">
                 <h2 className="text-2xl font-bold mb-6 text-blue-300">
                   Step 2: Upload & Crop Photo
                 </h2>
 
                 {!showCropper && !croppedImage && (
                   <label className="block">
-                    <div className="border-2 border-dashed border-blue-400 rounded-lg p-8 text-center cursor-pointer hover:border-blue-300 hover:bg-dark-blue-600 transition-all duration-200">
+                    <div className="border-2 border-dashed border-blue-400 rounded-lg p-4 sm:p-8 text-center cursor-pointer hover:border-blue-300 hover:bg-dark-blue-600 transition-all duration-200">
                       <svg
                         className="w-12 h-12 mx-auto mb-3 text-blue-400"
                         fill="none"
@@ -355,11 +368,11 @@ export default function Home() {
           </div>
 
           {/* Right Panel - Preview */}
-          <div className="sticky top-6 h-fit">
-            <div className="bg-dark-blue-700 bg-opacity-50 backdrop-blur rounded-2xl p-8 border border-dark-blue-600">
+          <div className="lg:sticky lg:top-6 h-fit">
+            <div className="bg-dark-blue-700 bg-opacity-50 backdrop-blur rounded-2xl p-4 sm:p-8 border border-dark-blue-600">
               <h2 className="text-2xl font-bold mb-6 text-blue-300">Preview</h2>
 
-              <div className="flex items-center justify-center bg-dark-blue-900 rounded-xl p-8">
+              <div className="flex items-center justify-start sm:justify-center bg-dark-blue-900 rounded-xl p-4 sm:p-8 overflow-x-auto">
                 <FlyerTemplate
                   ref={flyerRef}
                   teamName={selectedTeam}

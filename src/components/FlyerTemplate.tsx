@@ -19,12 +19,17 @@ export const FlyerTemplate = React.forwardRef<
       ref={ref}
       style={{
         width: "520px",
+        minWidth: "520px",
+        maxWidth: "520px",
         height: "580px",
+        minHeight: "580px",
+        maxHeight: "580px",
+        flex: "0 0 520px",
         position: "relative",
         overflow: "hidden",
         fontFamily: "'Inter', sans-serif",
         boxSizing: "border-box",
-        borderRadius: "8px",
+        borderRadius: 0,
       }}
     >
       {/* ── BACKGROUND: Stormy sky image from assets ── */}
@@ -54,35 +59,55 @@ export const FlyerTemplate = React.forwardRef<
 
       {/* ── REGISTERED watermark text ── */}
       <div
+        data-flyer-registered
         style={{
           position: "absolute",
-          top: "28%",
+          top: "162px",
           left: "50%",
           transform: "translateX(-50%)",
           zIndex: 2,
+          height: "120px",
+          lineHeight: "115px",
           whiteSpace: "nowrap",
           userSelect: "none",
           pointerEvents: "none",
         }}
       >
-        <span
+        <svg
+          width="700"
+          height="115"
+          viewBox="0 0 700 115"
+          aria-hidden="true"
           style={{
-            fontSize: "108px",
-            fontWeight: 900,
-            letterSpacing: "-2px",
-            fontFamily: "'Bebas Neue', sans-serif",
-            textTransform: "uppercase",
-            background:
-              "linear-gradient(180deg, rgba(160,175,190,0.55) 0%, rgba(90,105,120,0.3) 60%, rgba(50,65,80,0.15) 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
+            width: "700px",
+            minWidth: "700px",
+            maxWidth: "700px",
+            height: "115px",
+            minHeight: "115px",
+            maxHeight: "115px",
+            display: "block",
+            overflow: "visible",
             filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.5))",
-            lineHeight: 1,
           }}
         >
-          REGISTERED
-        </span>
+          <text
+            x="350"
+            y="70"
+            textAnchor="middle"
+            textLength="420"
+            lengthAdjust="spacingAndGlyphs"
+            style={{
+              fill: "rgba(140, 160, 180, 0.38)",
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: "95px",
+              fontWeight: 900,
+              letterSpacing: "-2px",
+              textTransform: "uppercase",
+            }}
+          >
+            REGISTERED
+          </text>
+        </svg>
       </div>
 
       {/* ── TOP BAR ── */}
@@ -108,7 +133,7 @@ export const FlyerTemplate = React.forwardRef<
               color: "#ffffff",
               lineHeight: 1.2,
               letterSpacing: "0.01em",
-              marginTop:"10px",
+              marginTop: "10px",
               fontFamily: "'Inter', sans-serif"
             }}
           >
@@ -335,9 +360,10 @@ export const FlyerTemplate = React.forwardRef<
           src={Footer.src}
           alt="Organized by USJ IEEE Student Branch & IEEE Computer Society"
           style={{
-            width: "100%",
-            maxHeight: "44px",
+            width: "246px",
+            height: "44px",
             objectFit: "contain",
+            display: "block",
           }}
         />
       </div>
