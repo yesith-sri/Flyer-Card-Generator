@@ -195,10 +195,9 @@ export const FlyerTemplate = React.forwardRef<
             height: "198px",
             borderRadius: "50%",
             padding: "3px",
-            background:
-              "conic-gradient(from 180deg, #00aaff, #0055cc, #00d4ff, #0099ee, #00aaff)",
+            background: "#00aaffed",
             boxShadow:
-              "0 0 28px rgba(0,170,255,0.7), 0 0 60px rgba(0,120,220,0.35)",
+              "0 0 28px rgba(0, 170, 255, 0.81), 0 0 60px rgba(0,120,220,0.35)",
             position: "relative",
           }}
         >
@@ -334,6 +333,7 @@ export const FlyerTemplate = React.forwardRef<
             fontFamily: "'Barlow Condensed', sans-serif",
             textShadow: "0 2px 12px rgba(0,0,0,0.5)",
             lineHeight: 1.1,
+            marginBottom: "5px"
           }}
         >
           {teamName || "Team Name"}
