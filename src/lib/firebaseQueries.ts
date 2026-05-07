@@ -22,7 +22,7 @@ export interface Team {
 // Get all unique teams
 export async function getAllTeams(): Promise<Team[]> {
   try {
-    const membersRef = collection(db, "registrations");
+    const membersRef = collection(db, "competition_registrations");
     const snapshot = await getDocs(membersRef);
 
     const teamsSet = new Set<string>();
@@ -46,7 +46,7 @@ export async function getAllTeams(): Promise<Team[]> {
 // Get team members by team name
 export async function getTeamMembers(teamName: string): Promise<TeamMember[]> {
   try {
-    const membersRef = collection(db, "registrations");
+    const membersRef = collection(db, "competition_registrations");
     const q = query(membersRef, where("teamName", "==", teamName));
     const snapshot = await getDocs(q);
 
