@@ -22,6 +22,10 @@ const config: Config = {
           900: "#050710",
         },
       },
+      fontFamily: {
+        reglo: ["Reglo", "sans-serif"],
+        uncutsans: ["UncutSans", "sans-serif"],
+      },
     },
   },
   plugins: [],

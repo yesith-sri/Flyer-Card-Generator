@@ -67,7 +67,7 @@ export const FlyerTemplate = React.forwardRef<
       <div
         style={{
           position: "absolute",
-          top: "486px",
+          top: "484px",
           left: "90px",
           width: "340px",
           zIndex: 2,
@@ -81,27 +81,29 @@ export const FlyerTemplate = React.forwardRef<
       >
         <div
           style={{
-            fontSize: "23px",
+            fontSize: "30px",
             lineHeight: 1.18,
             fontWeight: 900,
             letterSpacing: "0.03em",
             overflow: "visible",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
+            fontFamily: "'Reglo'"
           }}
         >
           {memberName || "Your Name"}
         </div>
         <div
           style={{
-            marginTop: "5px",
-            fontSize: "17px",
+            marginTop: "0px",
+            fontSize: "20px",
             lineHeight: 1.22,
             fontWeight: 800,
             letterSpacing: "0.08em",
             overflow: "visible",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
+            fontFamily: "'Reglo'"
           }}
         >
           {teamName || "Team Name"}

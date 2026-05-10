@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import {reglo, uncutsans} from '../../assets/fonts';
 
 export const metadata: Metadata = {
   title: "Flyer Generator - Create Your Event Flyer",
