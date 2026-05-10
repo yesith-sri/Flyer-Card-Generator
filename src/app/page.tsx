@@ -112,6 +112,8 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [isDownloading, setIsDownloading] = useState(false);
   const flyerRef = useRef<HTMLDivElement>(null);
+  const previewFrameRef = useRef<HTMLDivElement>(null);
+  const [previewScale, setPreviewScale] = useState(1);
 
   // Load teams on mount
   useEffect(() => {
@@ -127,6 +129,27 @@ export default function Home() {
       }
     };
     loadTeams();
+  }, []);
+
+  useEffect(() => {
+    const updatePreviewScale = () => {
+      const availableWidth = previewFrameRef.current?.clientWidth || 520;
+      setPreviewScale(Math.min(1, availableWidth / 520));
+    };
+
+    updatePreviewScale();
+
+    const observer = new ResizeObserver(updatePreviewScale);
+    if (previewFrameRef.current) {
+      observer.observe(previewFrameRef.current);
+    }
+
+    window.addEventListener("resize", updatePreviewScale);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updatePreviewScale);
+    };
   }, []);
 
   // Load members when team is selected
@@ -372,7 +395,40 @@ export default function Home() {
             <div className="bg-dark-blue-700 bg-opacity-50 backdrop-blur rounded-2xl p-4 sm:p-8 border border-dark-blue-600">
               <h2 className="text-2xl font-bold mb-6 text-blue-300">Preview</h2>
 
-              <div className="flex items-center justify-start sm:justify-center bg-dark-blue-900 rounded-xl p-4 sm:p-8 overflow-x-auto">
+              <div className="flex items-center justify-center bg-dark-blue-900 rounded-xl p-3 sm:p-8 overflow-hidden">
+                <div
+                  ref={previewFrameRef}
+                  className="relative w-full max-w-[520px] overflow-hidden"
+                  style={{ height: `${650 * previewScale}px` }}
+                >
+                  <div
+                    style={{
+                      width: "520px",
+                      height: "650px",
+                      transform: `scale(${previewScale})`,
+                      transformOrigin: "top left",
+                    }}
+                  >
+                    <FlyerTemplate
+                      teamName={selectedTeam}
+                      memberName={selectedMemberData?.name || ""}
+                      profileImage={croppedImage}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div
+                aria-hidden="true"
+                style={{
+                  position: "fixed",
+                  left: "-10000px",
+                  top: 0,
+                  width: "520px",
+                  height: "650px",
+                  pointerEvents: "none",
+                }}
+              >
                 <FlyerTemplate
                   ref={flyerRef}
                   teamName={selectedTeam}
