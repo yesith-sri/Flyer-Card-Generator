@@ -211,15 +211,23 @@ export default function Home() {
       const canvas = await html2canvas(flyerRef.current, {
         backgroundColor: null,
         scale: 2,
+        width: 520,
+        height: 650,
+        windowWidth: 520,
+        windowHeight: 650,
+        scrollX: 0,
+        scrollY: 0,
         onclone: (clonedDocument) => {
-          const registeredText = clonedDocument.querySelector(
-            "[data-flyer-registered]"
+          const exportNode = clonedDocument.querySelector(
+            "[data-flyer-export]"
           ) as HTMLElement | null;
 
-          if (registeredText) {
-            registeredText.style.top = "162px";
-            registeredText.style.height = "115px";
-            registeredText.style.lineHeight = "115px";
+          if (exportNode) {
+            exportNode.style.position = "absolute";
+            exportNode.style.left = "0";
+            exportNode.style.top = "0";
+            exportNode.style.opacity = "1";
+            exportNode.style.pointerEvents = "auto";
           }
         },
       });
@@ -420,13 +428,16 @@ export default function Home() {
 
               <div
                 aria-hidden="true"
+                data-flyer-export
                 style={{
-                  position: "fixed",
-                  left: "-10000px",
+                  position: "absolute",
+                  left: 0,
                   top: 0,
                   width: "520px",
                   height: "650px",
+                  opacity: 0,
                   pointerEvents: "none",
+                  zIndex: -1,
                 }}
               >
                 <FlyerTemplate

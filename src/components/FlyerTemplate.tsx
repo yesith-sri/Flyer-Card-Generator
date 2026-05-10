@@ -54,28 +54,20 @@ export const FlyerTemplate = React.forwardRef<
           height: "258px",
           zIndex: 1,
           overflow: "hidden",
-          background: "#d8d8d8",
+          backgroundColor: "#d8d8d8",
+          backgroundImage: profileImage ? `url(${profileImage})` : undefined,
+          backgroundPosition: "top center",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
         }}
-      >
-        {profileImage ? (
-          <img
-            src={profileImage}
-            alt={memberName || "Attendee"}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              objectPosition: "top center",
-              display: "block",
-            }}
-          />
-        ) : null}
-      </div>
+        role={profileImage ? "img" : undefined}
+        aria-label={profileImage ? memberName || "Attendee" : undefined}
+      />
 
       <div
         style={{
           position: "absolute",
-          top: "488px",
+          top: "486px",
           left: "90px",
           width: "340px",
           zIndex: 2,
@@ -90,10 +82,10 @@ export const FlyerTemplate = React.forwardRef<
         <div
           style={{
             fontSize: "23px",
-            lineHeight: 1.05,
+            lineHeight: 1.18,
             fontWeight: 900,
             letterSpacing: "0.03em",
-            overflow: "hidden",
+            overflow: "visible",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
           }}
@@ -104,10 +96,10 @@ export const FlyerTemplate = React.forwardRef<
           style={{
             marginTop: "5px",
             fontSize: "17px",
-            lineHeight: 1.05,
+            lineHeight: 1.22,
             fontWeight: 800,
             letterSpacing: "0.08em",
-            overflow: "hidden",
+            overflow: "visible",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
           }}
