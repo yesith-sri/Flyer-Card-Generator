@@ -83,7 +83,7 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
 
       <div className="space-y-4">
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-300">
+          <label className="block text-sm font-uncutsans text-gray-300">
             Move Left / Right
           </label>
           <input
@@ -98,7 +98,7 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-300">
+          <label className="block text-sm font-uncutsans text-gray-300">
             Move Up / Down
           </label>
           <input
@@ -112,7 +112,7 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
           />
         </div>
 
-        <label className="block text-sm font-medium text-gray-300">
+        <label className="block text-sm font-uncutsans text-gray-300">
           Zoom
         </label>
         <input
@@ -128,7 +128,7 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
 
       <button
         onClick={handleSaveCrop}
-        className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
+        className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white font-uncutsans py-3 px-4 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
       >
         Apply Crop
       </button>

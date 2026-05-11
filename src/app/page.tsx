@@ -10,13 +10,13 @@ import { getAllTeams, getTeamMembers, TeamMember, Team } from "@/lib/firebaseQue
 
 // ── Caption generator ─────────────────────────────────────────────────────────
 function generateCaption(memberName: string, teamName: string): string {
-  return `🎉 Thrilled to share that I, ${memberName}, have successfully registered for the Inter University Cloud Ideathon — Beauty of Cloud 2.0! ☁️
+  return `From local host to global scale. 🌍☁️
 
-Representing Team ${teamName}, we're geared up to innovate, collaborate, and push the boundaries of cloud technology.
+Proud to share that I'm joining Beauty of Cloud 2.0, Sri Lanka's premier student-led cloud ideathon. Looking forward to getting hands-on experience with enterprise cloud platforms, solving real architectural challenges, and pushing my limits.
 
-This is going to be an incredible journey and I can't wait to see what we build together! 🚀
+Let's build something beautiful together. ✨
 
-#BeautyOfCloud2 #CloudIdeathon #IEEE #USJIEEE #CloudComputing #Team${teamName.replace(/\s+/g, "")}`;
+#IEEE #USJ #IEEESB #CS #BeautyofCloud2.0`;
 }
 
 // ── CaptionBox component ──────────────────────────────────────────────────────
@@ -53,7 +53,7 @@ function CaptionBox({
   return (
     <div className="bg-dark-blue-700 bg-opacity-50 backdrop-blur rounded-2xl p-4 sm:p-8 border border-dark-blue-600">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-bold text-blue-300">
+        <h2 className="text-2xl font-reglo text-blue-300">
           Step 3: Copy Caption
         </h2>
       </div>
@@ -112,6 +112,8 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [isDownloading, setIsDownloading] = useState(false);
   const flyerRef = useRef<HTMLDivElement>(null);
+  const previewFrameRef = useRef<HTMLDivElement>(null);
+  const [previewScale, setPreviewScale] = useState(1);
 
   // Load teams on mount
   useEffect(() => {
@@ -127,6 +129,27 @@ export default function Home() {
       }
     };
     loadTeams();
+  }, []);
+
+  useEffect(() => {
+    const updatePreviewScale = () => {
+      const availableWidth = previewFrameRef.current?.clientWidth || 520;
+      setPreviewScale(Math.min(1, availableWidth / 520));
+    };
+
+    updatePreviewScale();
+
+    const observer = new ResizeObserver(updatePreviewScale);
+    if (previewFrameRef.current) {
+      observer.observe(previewFrameRef.current);
+    }
+
+    window.addEventListener("resize", updatePreviewScale);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updatePreviewScale);
+    };
   }, []);
 
   // Load members when team is selected
@@ -188,15 +211,23 @@ export default function Home() {
       const canvas = await html2canvas(flyerRef.current, {
         backgroundColor: null,
         scale: 2,
+        width: 520,
+        height: 650,
+        windowWidth: 520,
+        windowHeight: 650,
+        scrollX: 0,
+        scrollY: 0,
         onclone: (clonedDocument) => {
-          const registeredText = clonedDocument.querySelector(
-            "[data-flyer-registered]"
+          const exportNode = clonedDocument.querySelector(
+            "[data-flyer-export]"
           ) as HTMLElement | null;
 
-          if (registeredText) {
-            registeredText.style.top = "162px";
-            registeredText.style.height = "115px";
-            registeredText.style.lineHeight = "115px";
+          if (exportNode) {
+            exportNode.style.position = "absolute";
+            exportNode.style.left = "0";
+            exportNode.style.top = "0";
+            exportNode.style.opacity = "1";
+            exportNode.style.pointerEvents = "auto";
           }
         },
       });
@@ -217,10 +248,10 @@ export default function Home() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold mb-2 bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+          <h1 className="text-5xl font-reglo mb-2 bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
             Flyer Generator
           </h1>
-          <p className="text-gray-400 text-lg">
+          <p className="text-gray-400 text-lg font-uncutsans">
             Create your professional event flyer in minutes
           </p>
         </div>
@@ -229,7 +260,7 @@ export default function Home() {
           {/* Left Panel - Controls */}
           <div className="space-y-6">
             <div className="bg-dark-blue-700 bg-opacity-50 backdrop-blur rounded-2xl p-4 sm:p-8 border border-dark-blue-600">
-              <h2 className="text-2xl font-bold mb-6 text-blue-300">
+              <h2 className="text-2xl font-reglo mb-6 text-blue-300">
                 Step 1: Select Team & Member
               </h2>
 
@@ -257,7 +288,7 @@ export default function Home() {
             {/* Image Upload & Crop */}
             {selectedMember && (
               <div className="bg-dark-blue-700 bg-opacity-50 backdrop-blur rounded-2xl p-4 sm:p-8 border border-dark-blue-600">
-                <h2 className="text-2xl font-bold mb-6 text-blue-300">
+                <h2 className="text-2xl font-reglo mb-6 text-blue-300">
                   Step 2: Upload & Crop Photo
                 </h2>
 
@@ -277,7 +308,7 @@ export default function Home() {
                           d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                         />
                       </svg>
-                      <p className="text-gray-300 font-semibold">
+                      <p className="text-gray-300 font-uncutsans">
                         Click to upload your photo
                       </p>
                       <p className="text-gray-500 text-sm mt-1">
@@ -295,7 +326,7 @@ export default function Home() {
 
                 {showCropper && (
                   <div className="space-y-4">
-                    <p className="text-sm text-gray-400 mb-4">
+                    <p className="text-sm text-gray-400 mb-4 font-uncutsans">
                       Crop your image to fit the circular frame
                     </p>
                     <ImageCropper
@@ -316,7 +347,7 @@ export default function Home() {
                     </div>
                     <button
                       onClick={() => setShowCropper(true)}
-                      className="w-full bg-dark-blue-600 hover:bg-dark-blue-500 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200"
+                      className="w-full bg-dark-blue-600 hover:bg-dark-blue-500 text-white font-uncutsans py-3 px-4 rounded-lg transition-all duration-200"
                     >
                       Re-crop Image
                     </button>
@@ -370,9 +401,45 @@ export default function Home() {
           {/* Right Panel - Preview */}
           <div className="lg:sticky lg:top-6 h-fit">
             <div className="bg-dark-blue-700 bg-opacity-50 backdrop-blur rounded-2xl p-4 sm:p-8 border border-dark-blue-600">
-              <h2 className="text-2xl font-bold mb-6 text-blue-300">Preview</h2>
+              <h2 className="text-2xl font-reglo mb-6 text-blue-300">Preview</h2>
 
-              <div className="flex items-center justify-start sm:justify-center bg-dark-blue-900 rounded-xl p-4 sm:p-8 overflow-x-auto">
+              <div className="flex items-center justify-center bg-dark-blue-900 rounded-xl p-3 sm:p-8 overflow-hidden">
+                <div
+                  ref={previewFrameRef}
+                  className="relative w-full max-w-[520px] overflow-hidden"
+                  style={{ height: `${650 * previewScale}px` }}
+                >
+                  <div
+                    style={{
+                      width: "520px",
+                      height: "650px",
+                      transform: `scale(${previewScale})`,
+                      transformOrigin: "top left",
+                    }}
+                  >
+                    <FlyerTemplate
+                      teamName={selectedTeam}
+                      memberName={selectedMemberData?.name || ""}
+                      profileImage={croppedImage}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div
+                aria-hidden="true"
+                data-flyer-export
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: "520px",
+                  height: "650px",
+                  opacity: 0,
+                  pointerEvents: "none",
+                  zIndex: -1,
+                }}
+              >
                 <FlyerTemplate
                   ref={flyerRef}
                   teamName={selectedTeam}
@@ -383,7 +450,7 @@ export default function Home() {
 
               <div className="mt-6 p-4 bg-dark-blue-800 rounded-lg border border-dark-blue-600">
                 <p className="text-sm text-gray-400">
-                  <span className="font-semibold text-blue-300">Note:</span> The
+                  <span className="font-uncutsans text-blue-300">Note:</span> The
                   flyer will be downloaded as a PNG image with high quality. Team
                   name appears at the top, your photo in the center, and your name
                   at the bottom.
